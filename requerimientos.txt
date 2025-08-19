@@ -1,0 +1,58 @@
+Registrar Notas por curso.
+Quiero cargar las notas enviadas por el docente mediante algún medio de comunicación. Las notas que serán enviadas por los docentes no contienen un formato particular, sino que dependen de cada docente. Además, puede que las notas correspondan con alumnos que todavía no poseen legajos asociados. Estas notas podrán ser de cursos completos o de submódulos de cursos.
+Registrar usuario.
+Quiero poder registrar un usuario para organizar su información académica. El usuario deberá ser registrado con:
+Nombre y apellido.
+Correo electrónico.
+DNI.
+Legajos (opcional).
+CUIL.
+Registrar pagos asociado a cuota mensual.
+Quiero registrar pagos por parte de los alumnos para así poder llevar el control de las cuotas mensual, indicando cuil, fecha de pago y numero de cuota, con posibilidad de adjuntar un comprobante de transferencia (información proveniente de la planilla de pagos de tesorería).
+Registrar tarifa mensual.
+Quiero asociar una tarifa mensual a un curso o carrera para generar cuotas a pagar por los alumnos.
+Modificar tarifas.
+Quiero poder modificar de forma conjunta las tarifas para distintos cursos o carreras.
+Visualizar historial de cuotas.
+Quiero poder visualizar el estado de cada alumno con respecto al pago de las cuotas, para poder identificar cuotas adeudadas.
+Actualizar cuotas.
+Quiero poder actualizar el valor de las cuotas automáticamente, al actualizar los precios de tarifas asociadas.
+Registro de cursos.
+Quiero poder definir nuevos cursos con su información (nombre/s, horas, docentes, carreras a la que pertenece, si es de carácter optativo o no), para mantener actualizada la oferta académica.
+Registro de dictado de cursos.
+Quiero poder registrar un nuevo dictado de un curso ya registrado. El dictado tiene una fecha de inicio y una fecha de fin.
+Asociar un curso a una o más carreras.
+Los cursos podrán ser asociados a una o más carreras de forma dinámica. Es posible que un mismo curso tenga nombres diferentes, cada uno correspondiente a carreras de posgrado diferentes.
+
+Mantener documentación asociada a notas.
+Quiero mantener información asociada al Informe de Notas que hacen los docentes. Cada nota de un alumno, de una materia, puede tener un documento asociado que respalde la nota registrada. Por ejemplo, un email o un pdf.
+
+Asociar Legajo.
+Un alumno puede tener más de un legajo, un legajo está asociado a una carrera (que puede ser una especialización, maestría o doctorado). Quiero asociar alumnos a carreras registrando sus números de legajo. Para obtener el número de legajo el alumno debe certificar su título de grado (en papel).
+
+Mantener documentación asociada a carreras. (Comprobar si es una historia de usuario).
+Las carreras tienen ordenanzas de aprobación con las que se crean y resoluciones de implementación con las que se habilitan a dictarse. Además tienen una aprobación de CONEAU. Quiero mantener una referencia a la documentación asociada a cada carrera.
+
+Calculo de notas.
+Los cursos o módulos pueden tener submódulos que son dictados por distintos docentes y tienen distintas notas asociadas. Quiero calcular el promedio de las notas de los submódulos para obtener la nota del curso.
+
+Registrar nota por alumno.
+Quiero registrar notas de forma individual por alumno, buscando entre los cursos del alumno.
+
+Visualizar notas curso
+Quiero buscar un curso y visualizar las notas de todos los alumnos que lo hayan cursado.
+
+Visualizar notas alumnos
+Se presenta un listado de notas cargadas de un alumno en los distintos cursos en los que participó.
+
+Asociar Alumno a Dictado de un curso.
+Se debe poder asociar un curso a un alumno, para así poder tener seguimiento de cuotas y notas.
+
+Asociar Curso a Carrera
+Se asocia un curso a una carrera, con posibilidad de estar compuesto por submódulos de carrera donde se promedian las notas.
+
+Listado de alumnos en un curso
+Se necesita la generación de una tabla con los siguientes datos: nombreAlumno - legajo - email - dni - nota
+
+Exportar notas carrera de alumno
+Cuando un alumno está en condiciones de defender el TFI (tesis) se deben poder recopilar las notas para enviarse a alumnado.
