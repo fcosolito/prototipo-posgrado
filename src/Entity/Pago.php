@@ -16,6 +16,10 @@ class Pago
     #[ORM\Column]
     private ?float $valor = null;
 
+    #[ORM\OneToOne(inversedBy: 'pago', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Cuota $cuota = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +33,18 @@ class Pago
     public function setValor(float $valor): static
     {
         $this->valor = $valor;
+
+        return $this;
+    }
+
+    public function getCuota(): ?Cuota
+    {
+        return $this->cuota;
+    }
+
+    public function setCuota(Cuota $cuota): static
+    {
+        $this->cuota = $cuota;
 
         return $this;
     }

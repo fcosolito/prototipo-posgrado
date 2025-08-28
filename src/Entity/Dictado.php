@@ -20,6 +20,10 @@ class Dictado
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $fechaFin = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Curso $curso = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class Dictado
     public function setFechaFin(\DateTime $fechaFin): static
     {
         $this->fechaFin = $fechaFin;
+
+        return $this;
+    }
+
+    public function getCurso(): ?Curso
+    {
+        return $this->curso;
+    }
+
+    public function setCurso(?Curso $curso): static
+    {
+        $this->curso = $curso;
 
         return $this;
     }

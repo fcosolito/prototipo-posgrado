@@ -5,12 +5,12 @@
 {% block body %}
     <h1>Alumno index</h1>
 
-    {{ form_start(buscar_form) }}
-        {{ form_row(buscar_form.nombre)}}
-        {{ form_row(buscar_form.apellido)}}
-        {{ form_row(buscar_form.dni)}}
-        {{ form_row(buscar_form.buscar)}}
-    {{ form_end(buscar_form) }}
+    {{ form_start(form) }}
+        {{ form_row(form.nombre)}}
+        {{ form_row(form.apellido)}}
+        {{ form_row(form.dni)}}
+        {{ form_row(form.buscar)}}
+    {{ form_end(form) }}
 
     <table class="table">
         <thead>

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notas{% endblock %}
+
+{% block body %}
+    <h1>Registrar nota del alumno {{ alumno.nombre }} {{ alumno.apellido }}</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.inscripcion) }}
+        {{ form_row(form.valor) }}
+        {{ form_row(form.registrar, {'label': "Registrar nota"}) }}
+    {{ form_end(form) }}
+
+    <h1>Notas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for nota in notas %}
+            <tr>
+                <td>{{ nota.curso }}</td>
+                <td>{{ nota.valor }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>no se registraron notas</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_alumno_index') }}">back to list</a>
+{% endblock %}

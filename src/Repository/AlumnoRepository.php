@@ -16,6 +16,26 @@ class AlumnoRepository extends ServiceEntityRepository
         parent::__construct($registry, Alumno::class);
     }
 
+    public function search($criteria): array
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        if (!empty($criteria['nombre'])) {
+            $qb->andWhere('a.nombre LIKE :nom')
+                ->setParameter('nom', "%".$criteria['nombre']."%");
+        }
+        if (!empty($criteria['apellido'])) {
+            $qb->andWhere('a.apellido = :ap')
+                ->setParameter('ap', "%".$criteria['apellido']."%");
+        }
+        if (!empty($criteria['dni'])) {
+            $qb->andWhere('a.dni = :dni')
+                ->setParameter('dni', $criteria['dni']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Alumno[] Returns an array of Alumno objects
 //     */

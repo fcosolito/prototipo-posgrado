@@ -38,5 +38,9 @@
 
     <a href="{{ path('app_alumno_edit', {'id': alumno.id}) }}">edit</a>
 
+    {# <a href="{{ path('app_alumno_inscripcion', {'id': alumno.id}) }}">inscribir</a> #}
+
+    <a href="{{ path('app_alumno_notas', {'id': alumno.id}) }}">notas</a>
+
     {{ include('alumno/_delete_form.html.twig') }}
 {% endblock %}

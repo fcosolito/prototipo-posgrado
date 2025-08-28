@@ -3,7 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Alumno;
+use App\Entity\Curso;
+use App\Entity\Inscripcion;
+use App\Entity\Nota;
+use App\Form\AlumnoSearchType;
 use App\Form\AlumnoType;
+use App\Form\RegNotaAlumnoType;
 use App\Repository\AlumnoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,11 +19,32 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/alumno')]
 final class AlumnoController extends AbstractController
 {
-    #[Route(name: 'app_alumno_index', methods: ['GET'])]
-    public function index(AlumnoRepository $alumnoRepository): Response
+    #[Route(name: 'app_alumno_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, AlumnoRepository $alumnoRepository): Response
     {
+        $form = $this->createForm(AlumnoSearchType::class);
+        $form->handleRequest($request);
+
+        $criteria = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (!empty($data['nombre'])) {
+                $criteria['nombre'] = $data['nombre'];
+            }
+            if (!empty($data['apellido'])) {
+                $criteria['apellido'] = $data['apellido'];
+            }
+            if (!empty($data['dni'])) {
+                $criteria['dni'] = $data['dni'];
+            }
+        }
+
+        $alumnos = $alumnoRepository->search($criteria);
+
         return $this->render('alumno/index.html.twig', [
-            'alumnos' => $alumnoRepository->findAll(),
+            'alumnos' => $alumnos,
+            'form' => $form
         ]);
     }
 
@@ -77,5 +103,49 @@ final class AlumnoController extends AbstractController
         }
 
         return $this->redirectToRoute('app_alumno_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/notas', name: 'app_alumno_notas', methods: ['GET', 'POST'])]
+    public function registrar_nota(Alumno $alumno, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $inscripcionRepository = $entityManager->getRepository(Inscripcion::class);
+        $notaRepository = $entityManager->getRepository(Nota::class);
+
+        $nota = new Nota();
+        $inscripciones = $inscripcionRepository->findBy(["alumno" => $alumno]);
+        $notas = [];
+
+        $form = $this->createForm(RegNotaAlumnoType::class, null, [
+            "inscripciones" => $inscripciones,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (!empty($data["inscripcion"]) && !empty($data["valor"])) {
+                $insc = $inscripcionRepository->find($data["inscripcion"]);
+                $nota->setInscripcion($insc);
+                $nota->setValor($data["valor"]);
+
+                $entityManager->persist($nota);
+                $entityManager->flush();
+            }
+        }
+
+        foreach ($inscripciones as $inscripcion) {
+            $n = $notaRepository->findOneBy(["inscripcion" => $inscripcion]);
+            if ($n) {
+                $notas[] = [
+                    "valor" => $n->getValor(),
+                    "curso" => $n->getInscripcion()->getDictado()->getCurso()->getNombre(),
+                ];
+            }
+        }
+
+        return $this->render('alumno/notas.html.twig', [
+            'alumno' => $alumno,
+            'form' => $form,
+            'notas' => $notas,
+        ]);
     }
 }

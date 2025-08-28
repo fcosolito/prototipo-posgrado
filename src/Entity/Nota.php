@@ -16,6 +16,10 @@ class Nota
     #[ORM\Column]
     private ?int $valor = null;
 
+    #[ORM\OneToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Inscripcion $inscripcion = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +33,18 @@ class Nota
     public function setValor(int $valor): static
     {
         $this->valor = $valor;
+
+        return $this;
+    }
+
+    public function getInscripcion(): ?Inscripcion
+    {
+        return $this->inscripcion;
+    }
+
+    public function setInscripcion(?Inscripcion $inscripcion): static
+    {
+        $this->inscripcion = $inscripcion;
 
         return $this;
     }

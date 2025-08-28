@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Curso;
+use App\Entity\Nota;
+use App\Entity\Dictado;
+use App\Entity\Inscripcion;
 use App\Form\CursoType;
+use App\Form\RegNotaCursoType;
 use App\Repository\CursoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,5 +81,52 @@ final class CursoController extends AbstractController
         }
 
         return $this->redirectToRoute('app_curso_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/notas', name: 'app_curso_notas', methods: ['GET', 'POST'])]
+    public function registrar_nota(Curso $curso, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $inscripcionRepository = $entityManager->getRepository(Inscripcion::class);
+        $notaRepository = $entityManager->getRepository(Nota::class);
+        $dictadoRepository = $entityManager->getRepository(Dictado::class);
+
+        $nota = new Nota();
+        // Puede haber mas de un dictado vigente simultaneamente?
+        $dictado = $dictadoRepository->findVigente();
+        $inscripciones = $inscripcionRepository->findBy(["dictado" => $dictado]);
+        $notas = [];
+
+        $form = $this->createForm(RegNotaCursoType::class, null, [
+            "inscripciones" => $inscripciones,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (!empty($data["alumno"]) && !empty($data["valor"])) {
+                $insc = $inscripcionRepository->find($data["inscripcion"]);
+                $nota->setInscripcion($insc);
+                $nota->setValor($data["valor"]);
+
+                $entityManager->persist($nota);
+                $entityManager->flush();
+            }
+        }
+
+        foreach ($inscripciones as $inscripcion) {
+            $n = $notaRepository->findOneBy(["inscripcion" => $inscripcion]);
+            if ($n) {
+                $notas[] = [
+                    "valor" => $n->getValor(),
+                    "alumno" => $n->getAlumno(),
+                ];
+            }
+        }
+
+        return $this->render('alumno/notas.html.twig', [
+            'curso' => $curso,
+            'form' => $form,
+            'notas' => $notas,
+        ]);
     }
 }

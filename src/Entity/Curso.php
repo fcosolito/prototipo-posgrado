@@ -19,6 +19,9 @@ class Curso
     #[ORM\Column]
     private ?int $horas = null;
 
+    #[ORM\ManyToOne]
+    private ?Carrera $carrera = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Curso
     public function setHoras(int $horas): static
     {
         $this->horas = $horas;
+
+        return $this;
+    }
+
+    public function getCarrera(): ?Carrera
+    {
+        return $this->carrera;
+    }
+
+    public function setCarrera(?Carrera $carrera): static
+    {
+        $this->carrera = $carrera;
 
         return $this;
     }
