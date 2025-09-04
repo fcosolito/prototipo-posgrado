@@ -18,7 +18,7 @@ class RegNotaCursoType extends AbstractType
     {
         $builder
             ->add('alumno', ChoiceType::class, [
-                'choices' => $options["alumnos"],
+                'choices' => $options["inscripciones"],
                 'choice_value' => "id",
                 'choice_label' => function (?Inscripcion $inscripcion): string {
                     $alumno = $inscripcion ? $inscripcion->getAlumno() : null;

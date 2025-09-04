@@ -92,7 +92,9 @@ final class CursoController extends AbstractController
 
         $nota = new Nota();
         // Puede haber mas de un dictado vigente simultaneamente?
-        $dictado = $dictadoRepository->findVigente();
+        // si es el caso se deberian mostrar los cursados vigentes 
+        // y seleccionar uno
+        $dictado = $dictadoRepository->findVigente($curso);
         $inscripciones = $inscripcionRepository->findBy(["dictado" => $dictado]);
         $notas = [];
 
@@ -116,14 +118,15 @@ final class CursoController extends AbstractController
         foreach ($inscripciones as $inscripcion) {
             $n = $notaRepository->findOneBy(["inscripcion" => $inscripcion]);
             if ($n) {
+                $alumno = $n->getInscripcion()->getAlumno();
                 $notas[] = [
                     "valor" => $n->getValor(),
-                    "alumno" => $n->getAlumno(),
+                    "alumno" => $alumno->getNombre()." ".$alumno->getApellido()." (".$alumno->getDni().")",
                 ];
             }
         }
 
-        return $this->render('alumno/notas.html.twig', [
+        return $this->render('curso/notas.html.twig', [
             'curso' => $curso,
             'form' => $form,
             'notas' => $notas,

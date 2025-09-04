@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Curso;
 use App\Entity\Dictado;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,17 @@ class DictadoRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Dictado::class);
+    }
+
+    // el dictado vigente asociado al curso
+    // ahora solo busca un dictado cualquiera de $curso
+    public function findVigente(Curso $curso) : ?Dictado {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.curso = :val')
+            ->setParameter('val', $curso->getId())
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
 //    /**
