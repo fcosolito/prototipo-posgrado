@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Carrera;
 use App\Entity\Curso;
 use App\Entity\Nota;
 use App\Entity\Dictado;
@@ -31,8 +32,12 @@ final class CursoController extends AbstractController
     #[Route('/new', name: 'app_curso_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $carreras = $entityManager->getRepository(Carrera::class)->findAll();
+
         $curso = new Curso();
-        $form = $this->createForm(CursoType::class, $curso);
+        $form = $this->createForm(CursoType::class, $curso, [
+            "carreras" => $carreras,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -59,7 +64,11 @@ final class CursoController extends AbstractController
     #[Route('/{id}/edit', name: 'app_curso_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Curso $curso, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(CursoType::class, $curso);
+        $carreras = $entityManager->getRepository(Carrera::class)->findAll();
+
+        $form = $this->createForm(CursoType::class, $curso, [
+            "carreras" => $carreras,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
