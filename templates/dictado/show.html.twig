@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dictado{% endblock %}
+
+{% block body %}
+    <h1>Dictado</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ dictado.id }}</td>
+            </tr>
+            <tr>
+                <th>FechaInicio</th>
+                <td>{{ dictado.fechaInicio ? dictado.fechaInicio|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FechaFin</th>
+                <td>{{ dictado.fechaFin ? dictado.fechaFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ dictado.nombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h1>Inscripciones</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Dni</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for insc in inscripciones %}
+            <tr>
+                <td>{{ insc.nombre }}</td>
+                <td>{{ insc.apellido }}</td>
+                <td>{{ insc.dni }}</td>
+                <td>
+                    {% if insc.nota %}
+                        {{ insc.nota }}
+                    {% else %}
+                        --
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>no se registraron inscripciones</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Registrar nota de este dictado</h1>
+    {{ form_start(nota_form) }}
+        {{ form_row(nota_form.alumno) }}
+        {{ form_row(nota_form.valor) }}
+        {{ form_row(nota_form.registrar, {'label': "Registrar nota"}) }}
+    {{ form_end(nota_form) }}
+
+    <a href="{{ path('app_dictado_edit', {'id': dictado.id}) }}">edit</a>
+
+    {{ include('dictado/_delete_form.html.twig') }}
+{% endblock %}

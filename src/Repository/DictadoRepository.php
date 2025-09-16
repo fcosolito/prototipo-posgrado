@@ -17,16 +17,6 @@ class DictadoRepository extends ServiceEntityRepository
         parent::__construct($registry, Dictado::class);
     }
 
-    // el dictado vigente asociado al curso
-    // ahora solo busca un dictado cualquiera de $curso
-    public function findVigente(Curso $curso) : ?Dictado {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.curso = :val')
-            ->setParameter('val', $curso->getId())
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
 
 //    /**
 //     * @return Dictado[] Returns an array of Dictado objects

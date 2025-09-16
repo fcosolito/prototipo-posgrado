@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar Dictado{% endblock %}
+
+{% block body %}
+    <h1>Registrar dictado de {{ curso.nombre }}</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.fechaInicio) }}
+        {{ form_row(form.fechaFin) }}
+        {{ form_row(form.registrar, {'label': "Registrar dictado"}) }}
+    {{ form_end(form) }}
+
+    <h1>Dictados</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de fin</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dictado in dictados %}
+            <tr>
+                <td>{{ dictado.nombre }}</td>
+                <td>{{ dictado.fechaInicio }}</td>
+                <td>{{ dictado.fechaFin }}</td>
+                <td>
+                    <a href="{{ path('app_dictado_show', {'id': dictado.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>no se registraron dictados</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_curso_index') }}">back to list</a>
+{% endblock %}

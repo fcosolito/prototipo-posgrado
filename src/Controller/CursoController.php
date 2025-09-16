@@ -7,7 +7,9 @@ use App\Entity\Nota;
 use App\Entity\Dictado;
 use App\Entity\Inscripcion;
 use App\Form\CursoType;
+use App\Form\RegDictadoCursoType;
 use App\Form\RegNotaCursoType;
+use App\Form\SelDictadoCursoType;
 use App\Repository\CursoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -83,53 +85,54 @@ final class CursoController extends AbstractController
         return $this->redirectToRoute('app_curso_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/notas', name: 'app_curso_notas', methods: ['GET', 'POST'])]
-    public function registrar_nota(Curso $curso, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/dictados', name: 'app_curso_dictados', methods: ['GET', 'POST'])]
+    public function registrar_dictado(Curso $curso, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $inscripcionRepository = $entityManager->getRepository(Inscripcion::class);
-        $notaRepository = $entityManager->getRepository(Nota::class);
         $dictadoRepository = $entityManager->getRepository(Dictado::class);
 
-        $nota = new Nota();
-        // Puede haber mas de un dictado vigente simultaneamente?
-        // si es el caso se deberian mostrar los cursados vigentes 
-        // y seleccionar uno
-        $dictado = $dictadoRepository->findVigente($curso);
-        $inscripciones = $inscripcionRepository->findBy(["dictado" => $dictado]);
-        $notas = [];
-
-        $form = $this->createForm(RegNotaCursoType::class, null, [
-            "inscripciones" => $inscripciones,
+        $form = $this->createForm(RegDictadoCursoType::class, null, [
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            if (!empty($data["alumno"]) && !empty($data["valor"])) {
-                $insc = $inscripcionRepository->find($data["inscripcion"]);
-                $nota->setInscripcion($insc);
-                $nota->setValor($data["valor"]);
 
-                $entityManager->persist($nota);
+            $data = $form->getData();
+
+            if (!empty($data["fechaInicio"])) {
+                $fechaFin = !empty($data["fechaFin"]) ? $data["fechaFin"] : null;
+                $nombre = !empty($data["nombre"]) ? $data["nombre"] : null;
+
+                $dictado = new Dictado();
+
+                $dictado->setCurso($curso);
+                $dictado->setFechaInicio($data["fechaInicio"]);
+                $dictado->setFechaFin($fechaFin);
+                $dictado->setNombre($nombre);
+
+                $entityManager->persist($dictado);
                 $entityManager->flush();
             }
         }
 
-        foreach ($inscripciones as $inscripcion) {
-            $n = $notaRepository->findOneBy(["inscripcion" => $inscripcion]);
-            if ($n) {
-                $alumno = $n->getInscripcion()->getAlumno();
-                $notas[] = [
-                    "valor" => $n->getValor(),
-                    "alumno" => $alumno->getNombre()." ".$alumno->getApellido()." (".$alumno->getDni().")",
-                ];
-            }
+        $dictados = $dictadoRepository->findBy(["curso" => $curso]);
+        $dictados_ser = [];
+
+        foreach ($dictados as $dic) {
+            $inicio = $dic->getFechaInicio()->format("d-m-Y");
+            $fin = $dic->getFechaFin()->format("d-m-Y");
+
+            $dictados_ser[] = [
+                "fechaInicio" => $inicio,
+                "fechaFin" => $fin,
+                "id" => $dic->getId(),
+                "nombre" => $dic->getNombre(),
+            ];
         }
 
-        return $this->render('curso/notas.html.twig', [
+        return $this->render('curso/dictados.html.twig', [
             'curso' => $curso,
             'form' => $form,
-            'notas' => $notas,
+            'dictados' => $dictados_ser,
         ]);
     }
 }

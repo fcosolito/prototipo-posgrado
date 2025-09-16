@@ -24,6 +24,9 @@ class Dictado
     #[ORM\JoinColumn(nullable: false)]
     private ?Curso $curso = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nombre = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class Dictado
     public function setCurso(?Curso $curso): static
     {
         $this->curso = $curso;
+
+        return $this;
+    }
+
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(?string $nombre): static
+    {
+        $this->nombre = $nombre;
 
         return $this;
     }

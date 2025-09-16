@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Curso index{% endblock %}
+
+{% block body %}
+    <h1>Home</h1>
+
+    <h2>Ir a...</h2>
+
+    <table>
+        <td>
+            <a href="{{ path('app_curso_index') }}">Cursos</a>
+        </td>
+        <td>
+            <a href="{{ path('app_alumno_index') }}">Alumnos</a>
+        </td>
+    </table>
+{% endblock %}
