@@ -25,7 +25,7 @@ class AlumnoRepository extends ServiceEntityRepository
                 ->setParameter('nom', "%".$criteria['nombre']."%");
         }
         if (!empty($criteria['apellido'])) {
-            $qb->andWhere('a.apellido = :ap')
+            $qb->andWhere('a.apellido LIKE :ap')
                 ->setParameter('ap', "%".$criteria['apellido']."%");
         }
         if (!empty($criteria['dni'])) {
