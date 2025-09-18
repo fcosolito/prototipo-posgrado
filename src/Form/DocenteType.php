@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Alumno;
+use App\Entity\Docente;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AlumnoType extends AbstractType
+class DocenteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -19,14 +19,14 @@ class AlumnoType extends AbstractType
                 'label' => 'Nombre',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ingrese el nombre del alumno'
+                    'placeholder' => 'Ingrese el nombre del docente'
                 ]
             ])
             ->add('apellido', TextType::class, [
                 'label' => 'Apellido',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ingrese el apellido del alumno'
+                    'placeholder' => 'Ingrese el apellido del docente'
                 ]
             ])
             ->add('correo', EmailType::class, [
@@ -34,7 +34,7 @@ class AlumnoType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'alumno@ejemplo.com'
+                    'placeholder' => 'docente@ejemplo.com'
                 ]
             ])
             ->add('dni', IntegerType::class, [
@@ -44,20 +44,20 @@ class AlumnoType extends AbstractType
                     'placeholder' => '12345678'
                 ]
             ])
-            ->add('cuil', IntegerType::class, [
-                'label' => 'CUIL',
+            ->add('especialidad', TextType::class, [
+                'label' => 'Especialidad',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => '20123456789'
+                    'placeholder' => 'Ej: Ingeniería de Software'
                 ]
             ])
-            ->add('legajo', TextType::class, [
-                'label' => 'Legajo',
+            ->add('titulo', TextType::class, [
+                'label' => 'Título',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ej: 12345'
+                    'placeholder' => 'Ej: Doctor en Ciencias de la Computación'
                 ]
             ])
         ;
@@ -66,7 +66,7 @@ class AlumnoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Alumno::class,
+            'data_class' => Docente::class,
         ]);
     }
 }

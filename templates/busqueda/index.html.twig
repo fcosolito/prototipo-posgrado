@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Centro de Búsqueda{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-search me-2"></i>
+                Centro de Búsqueda
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Búsqueda Avanzada -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-search-plus me-2"></i>
+                        Búsqueda Avanzada
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Busque información específica en todo el sistema.</p>
+                    <a href="{{ path('app_busqueda_avanzada') }}" class="btn btn-primary btn-block">
+                        <i class="fas fa-search"></i> Ir a Búsqueda Avanzada
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas Rápidas -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Estadísticas Rápidas
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Vea un resumen rápido de los datos del sistema.</p>
+                    <a href="{{ path('app_busqueda_estadisticas_rapidas') }}" class="btn btn-info btn-block">
+                        <i class="fas fa-chart-bar"></i> Ver Estadísticas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Búsquedas Específicas -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">
+                        <i class="fas fa-users me-2"></i>
+                        Alumnos por Carrera
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Encuentre todos los alumnos inscritos en una carrera específica.</p>
+                    <a href="{{ path('app_busqueda_alumnos_carrera') }}" class="btn btn-success btn-block">
+                        <i class="fas fa-users"></i> Buscar Alumnos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cursos por Docente -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-warning">
+                        <i class="fas fa-chalkboard-teacher me-2"></i>
+                        Cursos por Docente
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Vea todos los cursos asignados a un docente específico.</p>
+                    <a href="{{ path('app_busqueda_cursos_docente') }}" class="btn btn-warning btn-block">
+                        <i class="fas fa-chalkboard-teacher"></i> Buscar Cursos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Búsqueda Rápida -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-dark">
+                        <i class="fas fa-bolt me-2"></i>
+                        Búsqueda Rápida
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="GET" action="{{ path('app_busqueda_avanzada') }}" class="form-inline">
+                        <div class="form-group mr-3">
+                            <label for="tipo" class="mr-2">Buscar en:</label>
+                            <select name="tipo" id="tipo" class="form-control mr-3">
+                                <option value="alumno">Alumnos</option>
+                                <option value="docente">Docentes</option>
+                                <option value="curso">Cursos</option>
+                                <option value="carrera">Carreras</option>
+                            </select>
+                        </div>
+                        <div class="form-group mr-3">
+                            <input type="text" name="termino" class="form-control" placeholder="Término de búsqueda..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

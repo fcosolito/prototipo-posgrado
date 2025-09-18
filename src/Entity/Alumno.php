@@ -28,6 +28,9 @@ class Alumno
     #[ORM\Column(nullable: true)]
     private ?int $cuil = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $legajo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class Alumno
     public function setCuil(?int $cuil): static
     {
         $this->cuil = $cuil;
+
+        return $this;
+    }
+
+    public function getLegajo(): ?string
+    {
+        return $this->legajo;
+    }
+
+    public function setLegajo(?string $legajo): static
+    {
+        $this->legajo = $legajo;
 
         return $this;
     }

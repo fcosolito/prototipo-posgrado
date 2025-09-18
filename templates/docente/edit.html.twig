@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Docente: {{ docente.nombreCompleto }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-edit me-2"></i>
+                    Editar Docente: {{ docente.nombreCompleto }}
+                </h1>
+                <div>
+                    <a href="{{ path('app_docente_show', {'id': docente.id}) }}" class="btn btn-info">
+                        <i class="fas fa-eye"></i> Ver Detalles
+                    </a>
+                    <a href="{{ path('app_docente_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver al Listado
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Información del Docente</h6>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.nombre, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.nombre) }}
+                            {{ form_errors(form.nombre) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.apellido, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.apellido) }}
+                            {{ form_errors(form.apellido) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.dni, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.dni) }}
+                            {{ form_errors(form.dni) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.correo, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.correo) }}
+                            {{ form_errors(form.correo) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.especialidad, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.especialidad) }}
+                            {{ form_errors(form.especialidad) }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.titulo, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.titulo) }}
+                            {{ form_errors(form.titulo) }}
+                        </div>
+                    </div>
+
+                    <div class="form-actions mt-4">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Actualizar Docente
+                        </button>
+                        <a href="{{ path('app_docente_show', {'id': docente.id}) }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validación del formulario
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+</script>
+{% endblock %}

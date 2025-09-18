@@ -1,18 +1,184 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Curso index{% endblock %}
+{% block title %}Sistema de Posgrado - Inicio{% endblock %}
 
 {% block body %}
-    <h1>Home</h1>
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white rounded p-5">
+                <h1 class="display-4">
+                    <i class="fas fa-graduation-cap me-3"></i>
+                    Sistema de Gestión de Posgrado
+                </h1>
+                <p class="lead">Plataforma integral para la gestión académica y administrativa de programas de posgrado</p>
+                <hr class="my-4">
+                <p>Gestiona alumnos, docentes, cursos, carreras, notas y pagos de manera eficiente y centralizada.</p>
+            </div>
+        </div>
+    </div>
 
-    <h2>Ir a...</h2>
+    <!-- Quick Access Cards -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-rocket me-2"></i>
+                Acceso Rápido
+            </h2>
+        </div>
+    </div>
 
-    <table>
-        <td>
-            <a href="{{ path('app_curso_index') }}">Cursos</a>
-        </td>
-        <td>
-            <a href="{{ path('app_alumno_index') }}">Alumnos</a>
-        </td>
-    </table>
+    <div class="row">
+        <!-- Gestión de Alumnos -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Gestión de Alumnos</h5>
+                    <p class="card-text">Registra y administra la información académica de los estudiantes.</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_alumno_index') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-list me-1"></i> Ver Alumnos
+                        </a>
+                        <a href="{{ path('app_alumno_new') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i> Nuevo Alumno
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Docentes -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Gestión de Docentes</h5>
+                    <p class="card-text">Administra la información de los profesores y sus especialidades.</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_docente_index') }}" class="btn btn-outline-success">
+                            <i class="fas fa-list me-1"></i> Ver Docentes
+                        </a>
+                        <a href="{{ path('app_docente_new') }}" class="btn btn-success">
+                            <i class="fas fa-plus me-1"></i> Nuevo Docente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Cursos -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-book fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Gestión de Cursos</h5>
+                    <p class="card-text">Crea y administra cursos, dictados y asignaciones de docentes.</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_curso_index') }}" class="btn btn-outline-info">
+                            <i class="fas fa-list me-1"></i> Ver Cursos
+                        </a>
+                        <a href="{{ path('app_curso_new') }}" class="btn btn-info">
+                            <i class="fas fa-plus me-1"></i> Nuevo Curso
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Carreras -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon bg-warning bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Gestión de Carreras</h5>
+                    <p class="card-text">Define y administra programas de posgrado y especializaciones.</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_carrera_index') }}" class="btn btn-outline-warning">
+                            <i class="fas fa-list me-1"></i> Ver Carreras
+                        </a>
+                        <a href="{{ path('app_carrera_new') }}" class="btn btn-warning">
+                            <i class="fas fa-plus me-1"></i> Nueva Carrera
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reportes y Análisis -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-gradient bg-dark text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Reportes y Análisis
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-graduation-cap text-primary me-2"></i>Reportes Académicos</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="{{ path('app_reporte_notas_curso') }}" class="text-decoration-none">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>Notas por Curso
+                                </a></li>
+                                <li><a href="{{ path('app_reporte_notas_alumno') }}" class="text-decoration-none">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>Notas por Alumno
+                                </a></li>
+                                <li><a href="{{ path('app_reporte_exportar_notas_carrera') }}" class="text-decoration-none">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>Exportar Notas para TFI
+                                </a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-dollar-sign text-success me-2"></i>Reportes Financieros</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="{{ path('app_reporte_estado_cuotas') }}" class="text-decoration-none">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>Estado de Cuotas
+                                </a></li>
+                                <li><a href="{{ path('app_reporte_estadisticas_generales') }}" class="text-decoration-none">
+                                    <i class="fas fa-arrow-right text-muted me-2"></i>Estadísticas Generales
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.feature-icon {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.jumbotron {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+</style>
 {% endblock %}

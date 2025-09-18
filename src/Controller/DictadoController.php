@@ -17,6 +17,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/dictado')]
 final class DictadoController extends AbstractController
 {
+
+    #[Route('/', name: 'app_dictado_index', methods: ['GET'])]
+    public function index(DictadoRepository $dictadoRepository): Response
+    {
+        return $this->render('dictado/index.html.twig', [
+            'dictados' => $dictadoRepository->findAll(),
+        ]);
+    }
+    
     #[Route('/{id}', name: 'app_dictado_show', methods: ['GET', 'POST'])]
     public function show(Dictado $dictado, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -29,6 +38,7 @@ final class DictadoController extends AbstractController
         foreach ($inscripciones as $i){
             $nota = $notaRepository->findOneBy(["inscripcion" => $i]);
             $inscripciones_ser[] = [
+                "id" => $i->getId(),
                 "nombre" => $i->getAlumno()->getNombre(),
                 "apellido" => $i->getAlumno()->getApellido(),
                 "dni" => $i->getAlumno()->getDni(),

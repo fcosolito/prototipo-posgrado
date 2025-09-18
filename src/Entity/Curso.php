@@ -22,6 +22,15 @@ class Curso
     #[ORM\ManyToOne]
     private ?Carrera $carrera = null;
 
+    #[ORM\ManyToOne(inversedBy: 'cursos')]
+    private ?Docente $docente = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $esObligatorio = true;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    private ?string $tarifaMensual = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +68,42 @@ class Curso
     public function setCarrera(?Carrera $carrera): static
     {
         $this->carrera = $carrera;
+
+        return $this;
+    }
+
+    public function getDocente(): ?Docente
+    {
+        return $this->docente;
+    }
+
+    public function setDocente(?Docente $docente): static
+    {
+        $this->docente = $docente;
+
+        return $this;
+    }
+
+    public function isEsObligatorio(): ?bool
+    {
+        return $this->esObligatorio;
+    }
+
+    public function setEsObligatorio(?bool $esObligatorio): static
+    {
+        $this->esObligatorio = $esObligatorio;
+
+        return $this;
+    }
+
+    public function getTarifaMensual(): ?string
+    {
+        return $this->tarifaMensual;
+    }
+
+    public function setTarifaMensual(?string $tarifaMensual): static
+    {
+        $this->tarifaMensual = $tarifaMensual;
 
         return $this;
     }

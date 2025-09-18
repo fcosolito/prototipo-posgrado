@@ -1,0 +1,246 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporte de Notas por Curso{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-list-alt me-2"></i>
+                    Reporte de Notas por Curso
+                </h1>
+                <a href="{{ path('app_reporte_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a Reportes
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtro de Curso -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Seleccionar Curso</h6>
+                </div>
+                <div class="card-body">
+                    <form method="GET" class="form-inline">
+                        <div class="form-group mr-3">
+                            <label for="curso" class="mr-2">Curso:</label>
+                            <select name="curso" id="curso" class="form-control" required>
+                                <option value="">-- Seleccionar curso --</option>
+                                {% for c in cursos %}
+                                    <option value="{{ c.id }}" {{ cursoId == c.id ? 'selected' : '' }}>
+                                        {{ c.nombre }}
+                                        {% if c.carrera %} - {{ c.carrera.nombre }}{% endif %}
+                                        {% if c.docente %} ({{ c.docente.nombreCompleto }}){% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Generar Reporte
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if curso %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">
+                        Notas del Curso: {{ curso.nombre }}
+                        {% if curso.carrera %}
+                            <span class="badge badge-info ml-2">{{ curso.carrera.nombre }}</span>
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if notas|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="notasTable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Alumno</th>
+                                        <th>Legajo</th>
+                                        <th>DNI</th>
+                                        <th>Email</th>
+                                        <th>Dictado</th>
+                                        <th>Nota</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set promedio = 0 %}
+                                    {% for nota in notas %}
+                                        {% set promedio = promedio + nota.valor %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>
+                                                <strong>{{ nota.inscripcion.alumno.apellido }}, {{ nota.inscripcion.alumno.nombre }}</strong>
+                                            </td>
+                                            <td>
+                                                {% if nota.inscripcion.alumno.legajo %}
+                                                    <span class="badge badge-secondary">{{ nota.inscripcion.alumno.legajo }}</span>
+                                                {% else %}
+                                                    <span class="text-muted">Sin legajo</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ nota.inscripcion.alumno.dni }}</td>
+                                            <td>
+                                                {% if nota.inscripcion.alumno.correo %}
+                                                    <a href="mailto:{{ nota.inscripcion.alumno.correo }}">{{ nota.inscripcion.alumno.correo }}</a>
+                                                {% else %}
+                                                    <span class="text-muted">No especificado</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ nota.inscripcion.dictado.nombre ?? 'Sin nombre' }}</td>
+                                            <td>
+                                                <span class="badge badge-{{ nota.valor >= 7 ? 'success' : (nota.valor >= 4 ? 'warning' : 'danger') }}">
+                                                    {{ nota.valor }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {% if nota.valor >= 7 %}
+                                                    <span class="text-success"><i class="fas fa-check"></i> Aprobado</span>
+                                                {% elseif nota.valor >= 4 %}
+                                                    <span class="text-warning"><i class="fas fa-exclamation"></i> Regular</span>
+                                                {% else %}
+                                                    <span class="text-danger"><i class="fas fa-times"></i> Desaprobado</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-info">
+                                        <td colspan="6"><strong>PROMEDIO DEL CURSO:</strong></td>
+                                        <td>
+                                            <strong class="badge badge-info">
+                                                {{ (promedio / notas|length)|number_format(2) }}
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Estadísticas del curso -->
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <div class="card border-left-primary">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Total Alumnos
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ notas|length }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card border-left-success">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Aprobados
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ notas|filter(n => n.valor >= 7)|length }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card border-left-warning">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Regulares
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ notas|filter(n => n.valor >= 4 and n.valor < 7)|length }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card border-left-danger">
+                                    <div class="card-body">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                            Desaprobados
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ notas|filter(n => n.valor < 4)|length }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botón de exportación -->
+                        <div class="text-center mt-3">
+                            <button class="btn btn-success" onclick="exportarExcel()">
+                                <i class="fas fa-file-excel"></i> Exportar a Excel
+                            </button>
+                            <button class="btn btn-danger" onclick="exportarPDF()">
+                                <i class="fas fa-file-pdf"></i> Exportar a PDF
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-clipboard-list fa-5x text-muted mb-3"></i>
+                            <h4 class="text-muted">No hay notas registradas</h4>
+                            <p class="text-muted">Este curso no tiene notas cargadas aún.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#notasTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json"
+        },
+        "pageLength": 25,
+        "order": [[ 1, "asc" ]]
+    });
+});
+
+function exportarExcel() {
+    alert('Funcionalidad de exportación a Excel en desarrollo');
+}
+
+function exportarPDF() {
+    alert('Funcionalidad de exportación a PDF en desarrollo');
+}
+</script>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+.text-xs {
+    font-size: 0.7rem;
+}
+</style>
+{% endblock %}
