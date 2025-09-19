@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Alumno;
 use App\Entity\Dictado;
 use App\Entity\Inscripcion;
 use App\Entity\Nota;
+use App\Form\AlumnoSearchType;
 use App\Form\DictadoType;
 use App\Form\RegNotaCursoType;
 use App\Repository\DictadoRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,4 +91,37 @@ final class DictadoController extends AbstractController
 
         return $this->redirectToRoute('app_dictado_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/edit', name: 'app_dictado_inscribir', methods: ['GET', 'POST'])]
+    public function inscribirAlumno(Request $request, Dictado $dictado, EntityManagerInterface $entityManager): Response
+    {
+        $alumnoRepository = $entityManager->getRepository(Alumno::class);
+        $form = $this->createForm(AlumnoSearchType::class);
+
+        $criteria = [];
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (!empty($data['nombre'])) {
+                $criteria['nombre'] = $data['nombre'];
+            }
+            if (!empty($data['apellido'])) {
+                $criteria['apellido'] = $data['apellido'];
+            }
+            if (!empty($data['dni'])) {
+                $criteria['dni'] = $data['dni'];
+            }
+        }
+
+        $alumnos = $alumnoRepository->search($criteria);
+
+
+        return $this->render('dictado/inscribir.html.twig', [
+            'dictado' => $dictado,
+            'form' => $form,
+            'alumnos' => $alumnos,
+        ]);
+    }
+
 }

@@ -4,13 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Alumno;
 use App\Entity\Curso;
+use App\Entity\Dictado;
 use App\Entity\Inscripcion;
 use App\Entity\Nota;
 use App\Form\AlumnoSearchType;
 use App\Form\AlumnoType;
+use App\Form\InscribirAlumnoCursoType;
+use App\Form\InscribirAlumnoDictadoType;
+use App\Form\InscripcionCursoType;
 use App\Form\RegNotaAlumnoType;
 use App\Repository\AlumnoRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,7 +111,7 @@ final class AlumnoController extends AbstractController
     }
 
     #[Route('/{id}/notas', name: 'app_alumno_notas', methods: ['GET', 'POST'])]
-    public function registrar_nota(Alumno $alumno, Request $request, EntityManagerInterface $entityManager): Response
+    public function registrarNota(Alumno $alumno, Request $request, EntityManagerInterface $entityManager): Response
     {
         $inscripcionRepository = $entityManager->getRepository(Inscripcion::class);
         $notaRepository = $entityManager->getRepository(Nota::class);
@@ -146,6 +151,38 @@ final class AlumnoController extends AbstractController
             'alumno' => $alumno,
             'form' => $form,
             'notas' => $notas,
+        ]);
+    }
+
+    #[Route('/{id}/inscribir-curso', name: 'app_alumno_inscribir_curso', methods: ['GET', 'POST'])]
+    public function inscribirCurso(Alumno $alumno, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $dictadoRepository = $entityManager->getRepository(Dictado::class);
+        $cursoRepository = $entityManager->getRepository(Curso::class);
+
+        $formCurso = $this->createForm(InscribirAlumnoCursoType::class, null, [
+            "cursos" => $cursoRepository->findAll(),
+        ]);
+        $formCurso->handleRequest($request);
+
+        if ($formCurso->isSubmitted() && $formCurso->isValid()) {
+            $data = $formCurso->getData();
+            if (!empty($data["curso"]) && !empty($data["dictado"])) {
+                $insc = new Inscripcion();
+                $insc->setAlumno($alumno);
+                $insc->setDictado($data["dictado"]);
+
+                $entityManager->persist($insc);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_alumno_show', ["id" => $alumno->getId()], Response::HTTP_SEE_OTHER);
+            }
+        }
+
+
+        return $this->render('alumno/inscribir.html.twig', [
+            'alumno' => $alumno,
+            'form_curso' => $formCurso,
         ]);
     }
 }

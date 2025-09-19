@@ -144,4 +144,21 @@ final class CursoController extends AbstractController
             'dictados' => $dictados_ser,
         ]);
     }
+
+
+    #[Route('/{id}/get-dictados', name: 'app_curso_get_dictados', methods: ['GET'])]
+    public function getDictados(Curso $curso, EntityManagerInterface $entityManager): Response {
+        $dictados = $entityManager->getRepository(Dictado::class)->findBy(["curso" => $curso]);
+
+        $dictados_ser = [];
+        foreach ($dictados as $d) {
+            $dictados_ser[] = [
+                "nombre" => $d->getNombre(),
+                "fechaInicio" => $d->getFechaInicio()->format("d-m-Y"),
+                "id" => $d->getId(),
+            ];
+        }
+
+        return $this->json($dictados_ser);
+    }
 }

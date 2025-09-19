@@ -4,32 +4,36 @@
 
 {% block body %}
     <h1>Inscribir al alumno {{ alumno.nombre }} {{ alumno.apellido }}</h1>
-    {{ form_start(form) }}
-        {{ form_row(form.cursado) }}
-        {{ form_row(form.registrar, {'label': "Registrar nota"}) }}
-    {{ form_end(form) }}
-
-    <h1>Inscripciones</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Curso</th>
-                <th>Carrera</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for curso in cursos %}
-            <tr>
-                <td>{{ nota.nombre }}</td>
-                <td>{{ nota.carrera }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td>no se registraron inscripciones</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {{ form_start(form_curso) }}
+        {{ form_row(form_curso.curso) }}
+        {{ form_row(form_curso.dictado) }}
+        {{ form_row(form_curso.inscribir, {'label': "Inscribir"}) }}
+    {{ form_end(form_curso) }}
 
     <a href="{{ path('app_alumno_index') }}">back to list</a>
+
+
+    <script>
+        $('#inscribir_alumno_curso_curso').on('change', function () {
+            let cursoId = $(this).val();
+            let $dictadoSelect = $('#inscribir_alumno_curso_dictado');
+
+            $dictadoSelect.empty().append('<option value="">Cargando...</option>');
+
+            if (cursoId) {
+                $.ajax({
+                    url: '/curso/' + cursoId + '/get-dictados/',
+                    type: 'GET',
+                    success: function (data) {
+                        $dictadoSelect.empty().append('<option value="">Seleccionar un dictado</option>');
+                        $.each(data, function (index, dictado) {
+                            $dictadoSelect.append('<option value="' + dictado.id + '">' + dictado.fechaInicio + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $dictadoSelect.empty().append('<option value="">Seleccionar un curso primero</option>');
+            }
+        });
+    </script>
 {% endblock %}
